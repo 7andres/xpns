@@ -3,6 +3,7 @@ import SwiftUI
 
 struct ExpenseRowView: View {
   let expense: Expense
+  @AppStorage("selectedCurrency") private var selectedCurrency: Currency = .usd
   
   var body: some View {
     HStack {
@@ -17,7 +18,7 @@ struct ExpenseRowView: View {
       Spacer()
       
       VStack(alignment: .trailing) {
-        Text(expense.amount, format: .currency(code: "USD"))
+        Text(expense.amount, format: .currency(code: selectedCurrency.rawValue))
           .font(.headline)
         Text(expense.category.rawValue)
           .font(.caption)

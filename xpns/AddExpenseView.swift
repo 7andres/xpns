@@ -9,6 +9,8 @@ struct AddExpenseView: View {
   @State private var amount = ""
   @State private var category: Category = .comida
   
+  @AppStorage("selectedCurrency") private var selectedCurrency: Currency = .usd
+  
   var body: some View {
     NavigationStack {
       Form {
@@ -16,8 +18,7 @@ struct AddExpenseView: View {
         TextField("Monto", text: $amount)
           .keyboardType(.decimalPad)
         Picker("Categoría", selection: $category) {
-          ForEach(Category.allCases) {
-            category in
+          ForEach(Category.allCases) { category in
             Text(category.rawValue).tag(category)
           }
         }
