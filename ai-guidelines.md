@@ -2,6 +2,20 @@
 
 This document provides guidance for AI assistants (e.g., Gemini, Cursor, Claude.ai/code) when working with code in this repository.
 
+## Project Overview
+
+xpns is an app to track and control personal expenses, built with Swift and SwiftUI. Main features include:
+
+- View and search expenses
+- Filter by category
+- Sort by amount
+- Add new expenses
+- Choose display currency (USD, COP)
+
+## Code formatting
+
+The project uses SwiftFormat with 2-space indentation.
+
 ## General Principles
 
 *   **Follow Existing Conventions:** Before making any changes, review the existing code to understand its style, structure, and patterns. Ensure that your contributions are consistent with the established conventions.
