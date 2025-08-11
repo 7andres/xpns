@@ -42,6 +42,7 @@ struct AddExpenseView: View {
             .onChange(of: amount) { _, newValue in
               formatAmountInput(newValue)
             }
+            // TODO: not really useful now, but can be in the future
             .onChange(of: selectedCurrency) { _, _ in
               updateFormattedAmount()
             }
@@ -72,36 +73,44 @@ struct AddExpenseView: View {
   }
   
   private func saveExpense() {
-    let finalAmount = rawAmount > 0 ? rawAmount : (Double(amount) ?? 0)
-    guard finalAmount > 0 else { return }
-    let newExpense = Expense(name: name, date: Date(), amount: finalAmount, category: category)
+    guard isValidAmount else { return }
+    let newExpense = Expense(name: name, date: Date(), amount: rawAmount, category: category)
     store.expenses.append(newExpense)
     dismiss()
   }
   
+  private var isValidAmount: Bool {
+    rawAmount > 0
+  }
+  
   private func formatAmountInput(_ input: String) {
-    // Remover caracteres no numéricos excepto punto y coma
+    let cleanedInput = sanitizeNumericInput(input)
+    let formattedInput = limitToTwoDecimals(cleanedInput)
+    updateRawAmount(from: formattedInput)
+    updateDisplayAmount(formattedInput)
+  }
+  
+  private func sanitizeNumericInput(_ input: String) -> String {
     let filtered = input.filter { "0123456789.,".contains($0) }
+    return filtered.replacingOccurrences(of: ",", with: ".")
+  }
+  
+  private func limitToTwoDecimals(_ input: String) -> String {
+    let components = input.components(separatedBy: ".")
+    guard components.count > 1 else { return input }
     
-    // Reemplazar coma con punto para consistencia
-    let normalized = filtered.replacingOccurrences(of: ",", with: ".")
-    
-    // Limitar a máximo 2 decimales
-    let components = normalized.components(separatedBy: ".")
-    var result = components[0]
-    
-    if components.count > 1 {
-      let decimals = String(components[1].prefix(2))
-      result = "\(result).\(decimals)"
-    }
-    
-    // Actualizar el valor raw
-    rawAmount = Double(result) ?? 0
-    
-    // Actualizar el texto solo si es diferente para evitar bucles
-    if result != amount {
-      amount = result
-    }
+    let integerPart = components[0]
+    let decimalPart = String(components[1].prefix(2))
+    return "\(integerPart).\(decimalPart)"
+  }
+  
+  private func updateRawAmount(from input: String) {
+    rawAmount = Double(input) ?? 0
+  }
+  
+  private func updateDisplayAmount(_ newValue: String) {
+    guard newValue != amount else { return }
+    amount = newValue
   }
   
   private func updateFormattedAmount() {
