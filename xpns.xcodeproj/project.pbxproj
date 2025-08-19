@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4183FFDB2E49945900D48A75 /* SharingGRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 4183FFDA2E49945900D48A75 /* SharingGRDB */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		4194F98A2E47BA1200A43BE3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4183FFDB2E49945900D48A75 /* SharingGRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = xpns;
 			packageProductDependencies = (
+				4183FFDA2E49945900D48A75 /* SharingGRDB */,
 			);
 			productName = xpns;
 			productReference = 4194F97C2E47BA1100A43BE3 /* xpns.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = 4194F9732E47BA1100A43BE3;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				4183FFD92E49945900D48A75 /* XCRemoteSwiftPackageReference "sharing-grdb" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4194F97D2E47BA1100A43BE3 /* Products */;
 			projectDirPath = "";
@@ -558,6 +567,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4183FFD92E49945900D48A75 /* XCRemoteSwiftPackageReference "sharing-grdb" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/sharing-grdb";
+			requirement = {
+				kind = exactVersion;
+				version = 0.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4183FFDA2E49945900D48A75 /* SharingGRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4183FFD92E49945900D48A75 /* XCRemoteSwiftPackageReference "sharing-grdb" */;
+			productName = SharingGRDB;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4194F9742E47BA1100A43BE3 /* Project object */;
 }

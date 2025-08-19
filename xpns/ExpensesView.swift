@@ -1,4 +1,5 @@
 import SwiftUI
+import SharingGRDB
 
 enum SortOrder {
   case none
@@ -7,14 +8,18 @@ enum SortOrder {
 }
 
 struct ExpensesView: View {
-  @Environment(ExpenseStore.self) private var store
   @State private var isAddingExpense = false
   @State private var searchText = ""
   @State private var selectedCategory: Category? = nil
   @State private var sortOrder: SortOrder = .none
   
+  @FetchAll
+  private var expenses: [Expense]
+  
   var filteredExpenses: [Expense] {
-    var expenses = store.expenses
+    // // TODO: Replace this with grdb
+    // var expenses = store.expenses
+    var expenses = [Expense]()
     
     if !searchText.isEmpty {
       expenses = expenses.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
@@ -39,7 +44,7 @@ struct ExpensesView: View {
   var body: some View {
     NavigationStack {
       List {
-        ForEach(filteredExpenses) { expense in
+        ForEach(expenses) { expense in
           ExpenseRowView(expense: expense)
         }
       }
@@ -90,5 +95,4 @@ struct ExpensesView: View {
 
 #Preview {
   ExpensesView()
-    .environment(ExpenseStore())
 }

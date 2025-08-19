@@ -1,16 +1,18 @@
-
 import SwiftUI
+import SharingGRDB
 
 struct AddExpenseView: View {
-  @Environment(ExpenseStore.self) private var store
   @Environment(\.dismiss) private var dismiss
   
   @State private var name = ""
   @State private var amount = ""
   @State private var rawAmount = 0.0
-  @State private var category: Category = .comida
+  @State private var category: Category = .food
   
   @AppStorage("selectedCurrency") private var selectedCurrency: Currency = .usd
+  
+  @Dependency(\.defaultDatabase)
+  var database
   
   private var currencyFormatter: NumberFormatter {
     let formatter = NumberFormatter()
@@ -74,8 +76,20 @@ struct AddExpenseView: View {
   
   private func saveExpense() {
     guard isValidAmount else { return }
-    let newExpense = Expense(name: name, date: Date(), amount: rawAmount, category: category)
-    store.expenses.append(newExpense)
+    
+    let draft = Expense.Draft(
+      name: name,
+      date: Date.now,
+      amount: rawAmount,
+      category: category
+    )
+    
+    try! database.write { db in
+      try! Expense
+        .insert{ draft }
+        .execute(db)
+    }
+    
     dismiss()
   }
   
@@ -122,5 +136,4 @@ struct AddExpenseView: View {
 
 #Preview {
   AddExpenseView()
-    .environment(ExpenseStore())
 }
