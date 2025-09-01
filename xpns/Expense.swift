@@ -3,6 +3,16 @@ import Foundation
 import Observation
 import SharingGRDB
 
+enum Frequency: String, CaseIterable, Identifiable, QueryBindable {
+  case daily = "Diario"
+  case weekly = "Semanal"
+  case monthly = "Mensual"
+  case yearly = "Anual"
+  case nonRepeatable = "No repetible"
+
+  var id: String { rawValue }
+}
+
 enum Category: String, CaseIterable, Identifiable, QueryBindable {
   case food = "Comida"
   case bills = "Pagos de Facturas"
@@ -20,4 +30,5 @@ struct Expense: Identifiable, Hashable {
   var date: Date = .now
   var amount: Double
   var category: Category
+  var frequency: Frequency? = nil
 }

@@ -30,5 +30,14 @@ struct ExpenseRowView: View {
 }
 
 #Preview {
-  ExpenseRowView(expense: Expense(id: 0, name: "Test Expense", date: Date(), amount: 99.99, category: .personal))
+  ExpenseRowView(
+    expense: Expense(
+      id: 0,
+      name: "Test Expense",
+      date: Date(),
+      amount: 99.99,
+      category: .personal,
+      frequency: .monthly
+    )
+  )
 }

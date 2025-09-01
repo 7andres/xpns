@@ -60,15 +60,20 @@ struct xpnsApp: App {
     migrator.registerMigration("Create expenses table") { db in
       try db.create(table: "expenses") { td in
         td.autoIncrementedPrimaryKey("id")
-          //.notNull()
+
         td.column("name", .text)
           .notNull()
           .defaults(to: "")
+
         td.column("date", .datetime)
+
         td.column("amount", .double)
+
         td.column("category", .text)
           .notNull()
           .defaults(to: Category.defaultCategory.rawValue)
+
+        td.column("frequency", .text)
       }
     }
     

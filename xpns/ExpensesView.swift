@@ -16,31 +16,6 @@ struct ExpensesView: View {
   @FetchAll
   private var expenses: [Expense]
   
-  var filteredExpenses: [Expense] {
-    // // TODO: Replace this with grdb
-    // var expenses = store.expenses
-    var expenses = [Expense]()
-    
-    if !searchText.isEmpty {
-      expenses = expenses.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
-    }
-    
-    if let selectedCategory {
-      expenses = expenses.filter { $0.category == selectedCategory }
-    }
-    
-    switch sortOrder {
-    case .ascending:
-      expenses.sort { $0.amount < $1.amount }
-    case .descending:
-      expenses.sort { $0.amount > $1.amount }
-    case .none:
-      break
-    }
-    
-    return expenses
-  }
-  
   var body: some View {
     NavigationStack {
       List {

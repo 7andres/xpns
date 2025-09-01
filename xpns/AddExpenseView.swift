@@ -8,6 +8,9 @@ struct AddExpenseView: View {
   @State private var amount = ""
   @State private var rawAmount = 0.0
   @State private var category: Category = .food
+  @State private var frequency: Frequency = .monthly
+  @State private var date = Date()
+  @State private var isFrequentlyExpense = false
   
   @AppStorage("selectedCurrency") private var selectedCurrency: Currency = .usd
   
@@ -32,33 +35,66 @@ struct AddExpenseView: View {
   var body: some View {
     NavigationStack {
       Form {
-        TextField("Nombre", text: $name)
-        
-        VStack(alignment: .leading, spacing: 4) {
-          Text("Monto")
-            .font(.caption)
-            .foregroundColor(.secondary)
+        Section {
+          TextField("Nombre", text: $name)
           
-          TextField("0.00", text: $amount)
-            .keyboardType(.decimalPad)
-            .onChange(of: amount) { _, newValue in
-              formatAmountInput(newValue)
-            }
+          VStack(alignment: .leading, spacing: 4) {
+            Text("Monto")
+              .font(.caption)
+              .foregroundColor(.secondary)
+            
+            TextField("0.00", text: $amount)
+              .keyboardType(.decimalPad)
+              .onChange(of: amount) { _, newValue in
+                formatAmountInput(newValue)
+              }
             // TODO: not really useful now, but can be in the future
-            .onChange(of: selectedCurrency) { _, _ in
-              updateFormattedAmount()
-            }
-          
-          if rawAmount > 0 {
-            Text(currencyFormatter.string(from: NSNumber(value: rawAmount)) ?? "")
+              .onChange(of: selectedCurrency) { _, _ in
+                updateFormattedAmount()
+              }
+            
+            if rawAmount > 0 {
+              Text(
+                currencyFormatter.string(from: NSNumber(value: rawAmount)) ?? ""
+              )
               .font(.caption)
               .foregroundColor(.blue)
+            }
           }
         }
         
-        Picker("Categoría", selection: $category) {
-          ForEach(Category.allCases) { category in
-            Text(category.rawValue).tag(category)
+        Section {
+          Picker("Categoría", selection: $category) {
+            ForEach(Category.allCases) { category in
+              Text(category.rawValue)
+                .tag(category)
+            }
+          }
+        }
+        
+        Section {
+          DatePicker(
+            "Fecha",
+            selection: $date,
+            displayedComponents: [.date]
+          )
+        }
+        
+        Section {
+          Toggle(
+            isOn: $isFrequentlyExpense,
+            label: {
+              Text("Pago recurrente?")
+            }
+          )
+          
+          if isFrequentlyExpense {
+            Picker("Frecuencia", selection: $frequency) {
+              ForEach(Frequency.allCases) { frequency in
+                Text(frequency.rawValue)
+                  .tag(frequency)
+              }
+            }
           }
         }
       }
@@ -79,9 +115,10 @@ struct AddExpenseView: View {
     
     let draft = Expense.Draft(
       name: name,
-      date: Date.now,
+      date: date,
       amount: rawAmount,
-      category: category
+      category: category,
+      frequency: frequency
     )
     
     try! database.write { db in
